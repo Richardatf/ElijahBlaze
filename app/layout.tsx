@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://elijahblaze.com"),
   title: "Elijah Blaze — Beneath Eden",
   description: "The public development hub for Beneath Eden, the Unity game, and the Blaze Codex.",
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
