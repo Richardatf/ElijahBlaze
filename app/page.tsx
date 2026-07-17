@@ -47,6 +47,10 @@ export default function Home() {
 
       <section className="hero" id="home">
         <div className="hero-atmosphere" aria-hidden="true"><div className="sun"/><div className="monolith"/><div className="signal-line"/></div>
+        <div className="avatar-frame">
+          <img src="/assets/elijah-blaze-avatar.png" alt="Elijah Blaze in blue-and-gold living guardian armor, crowned by flame" />
+          <div className="avatar-caption"><span>GUARDIAN FORM</span><b>ELIJAH + AZEL</b></div>
+        </div>
         <div className="eyebrow"><span>PROJECT AZEL</span><span className="line"/><span>TRANSMISSION 001</span></div>
         <h1>ELIJAH<br/><em>BLAZE</em></h1>
         <p className="hero-tag">Some dreams are not your own.</p>
