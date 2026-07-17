@@ -5,6 +5,26 @@ const milestones = [
   ["Gate objective", "next"],
 ];
 
+const saga = [
+  ["Beneath Eden", "Curiosity", "Elijah Blue begins experiencing dreams that are not entirely his own and discovers the first traces of AZEL beneath West Ridge."],
+  ["The Guardian’s Dream", "Trust", "Elijah’s dream-entanglement with AZEL deepens, and he must decide whether the presence inside his mind is guiding him—or using him."],
+  ["The Garden Below", "Discovery", "Elijah enters the buried pre-Edenic world and learns that AZEL is living architecture extending through an entire hidden realm."],
+  ["The Shattered Architecture", "Identity", "The boundary between Elijah Blue and Elijah Blaze becomes increasingly uncertain as damaged portions of the ancient system awaken."],
+  ["The Seven Echoes", "Sacrifice", "Seven surviving echoes of the old world reveal competing pieces of the truth, each demanding something from Elijah."],
+  ["The Last Kavanah", "Choice", "Elijah’s bond with AZEL reaches its greatest strength, but righteousness—not power—determines whether the architecture will obey him."],
+  ["The Flame Above Eden", "Restoration", "The hidden conflict rises into the visible world, and Elijah must restore what was broken without becoming the guardian the ancient world feared."],
+];
+
+const comics = [
+  ["Hollow Court", "Opening arc", "Elijah enters a damaged court of living architecture and encounters the first Shardlings."],
+  ["The First Guardian", "AZEL prequel", "Fragments of the ancient guardian’s history—without fully revealing the pre-Edenic civilization."],
+  ["West Ridge", "Grounded mystery", "Disappearances, symbols, survey records, and disturbances beneath the Arizona desert."],
+  ["Shardfall", "Limited series", "The first major breach of the Qlippot into the surface world."],
+  ["The Seven Echoes", "Companion anthology", "Each issue follows an ancient echo, lost chamber, guardian remnant, or moral failure."],
+  ["Nora", "Side-story series", "Elijah’s transformation seen from outside his own mind—and partly through Nora’s eyes."],
+  ["Before the Flame", "Later prequel", "Family, curiosity, diary, school life, and Elijah Blue’s earliest dreams before full synchronization."],
+];
+
 const codexEntries = [
   ["01", "Elijah Blue", "The dreamer", "A sixteen-year-old searching for the line between memory and inheritance."],
   ["02", "AZEL", "Living architecture", "An ancient intelligence sleeping beneath the Arizona desert."],
@@ -50,7 +70,9 @@ export default function Home() {
       <section className="books section" id="books">
         <div className="book-art"><div className="book-cover"><p>A NOVEL</p><div className="glyph">◈</div><h3>BENEATH<br/><em>EDEN</em></h3><small>BOOK ONE OF THE ELIJAH BLAZE SAGA</small></div><div className="book-shadow"/></div>
         <div className="book-copy"><p className="kicker">02 / THE BOOKS</p><h2>Before Elijah Blaze,<br/>there was <i>Elijah Blue.</i></h2><blockquote>“I used to think dreams were the one place nobody else could follow you.”</blockquote><p>Book One begins a seven-part saga of discovery, moral courage, and an impossible relationship between a boy and the intelligence sleeping below his world.</p><div className="book-meta"><span><small>FORMAT</small>NOVEL</span><span><small>SERIES</small>01 / 07</span><span><small>STATUS</small>IN DEVELOPMENT</span></div><a className="button primary" href="#signal">Read the first transmission <span>↗</span></a></div>
-        <div className="saga-roadmap"><p>THE SEVEN-BOOK SAGA</p>{Array.from({length:7},(_,i)=><div className={i===0?'active':''} key={i}><span>0{i+1}</span><b>{i===0?'BENEATH EDEN':'ARCHIVE SEALED'}</b><small>{i===0?'IN DEVELOPMENT':'SYNCHRONIZATION REQUIRED'}</small></div>)}</div>
+        <div className="saga-roadmap"><p>THE SEVEN-BOOK SAGA</p>{saga.map(([title,theme,description],i)=><article className={i===0?'active':''} key={title}><span>0{i+1}</span><div><b>{title}</b><p>{description}</p></div><small>{theme}</small></article>)}</div>
+        <div className="comics-intro"><div><p className="kicker">ELIJAH BLAZE COMICS</p><h2>Beside. Before.<br/><i>Beneath.</i></h2></div><blockquote>The novels tell Elijah’s central journey. The comics reveal stories happening beside, before, and beneath it.</blockquote></div>
+        <div className="comics-grid">{comics.map(([title,format,description],i)=><article key={title}><span>COMIC FILE / 0{i+1}</span><p>{format}</p><h3>Elijah Blaze:<br/><i>{title}</i></h3><div className="comic-sigil">{['◇','◉','⌖','✦','⑦','○','△'][i]}</div><p className="comic-copy">{description}</p><small>{i===0?'OPENING ARC':'DEVELOPMENT SLATE'}</small></article>)}</div>
       </section>
 
       <section className="codex section" id="codex">
