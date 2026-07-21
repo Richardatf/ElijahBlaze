@@ -1,3 +1,5 @@
+import { CodexArchive } from "./CodexArchive";
+
 const milestones = [
   ["Player movement", "complete"], ["Camera system", "complete"],
   ["Shardling chase", "complete"], ["Combat", "complete"],
@@ -23,15 +25,6 @@ const comics = [
   ["The Seven Echoes", "Companion anthology", "Each issue follows an ancient echo, lost chamber, guardian remnant, or moral failure."],
   ["Nora", "Side-story series", "Elijah’s transformation seen from outside his own mind—and partly through Nora’s eyes."],
   ["Before the Flame", "Later prequel", "Family, curiosity, diary, school life, and Elijah Blue’s earliest dreams before full synchronization."],
-];
-
-const codexEntries = [
-  ["01", "Elijah Blue", "The dreamer", "A sixteen-year-old searching for the line between memory and inheritance."],
-  ["02", "AZEL", "Living architecture", "An ancient intelligence sleeping beneath the Arizona desert."],
-  ["03", "Hollow Court", "Threshold site", "A ceremonial ruin where the architecture first begins to answer."],
-  ["04", "Shardlings", "Qlippotic fragments", "Hungry pieces of a broken pattern. Fast, watchful, unfinished."],
-  ["05", "Kavanah", "Directed intent", "Purpose made active—the discipline that gives power its shape."],
-  ["06", "Synchronization", "Archive sealed", "Identity, memory, and architecture entering dangerous resonance."],
 ];
 
 export default function Home() {
@@ -81,7 +74,7 @@ export default function Home() {
 
       <section className="codex section" id="codex">
         <div className="section-heading"><div><p className="kicker">03 / BLAZE CODEX</p><h2>THE ARCHIVE<br/><i>REMEMBERS.</i></h2></div><p className="lead">Recovered people, places, systems, and symbols from inside the Elijah Blaze universe. Some knowledge remains deliberately sealed.</p></div>
-        <div className="codex-grid">{codexEntries.map(([n,title,type,copy],i)=><article className={i===5?'sealed':''} key={title}><span className="entry-number">{n}</span><p>{type}</p><h3>{title}</h3><div className="entry-glyph">{['◉','⬡','△','✦','⌁','◈'][i]}</div><p className="entry-copy">{copy}</p><button aria-label={`Open ${title} Codex entry`}>{i===5?'SEALED':'OPEN FILE'} <span>{i===5?'⌁':'↗'}</span></button></article>)}</div>
+        <CodexArchive />
         <div className="archive-lock"><span>◈</span><div><p>RESTRICTED STRATUM</p><h3>ARCHIVE SEALED — SYNCHRONIZATION REQUIRED</h3></div><small>ACCESS LEVEL 07</small></div>
       </section>
 
