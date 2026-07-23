@@ -1,4 +1,5 @@
 import { CodexArchive } from "./CodexArchive";
+import { SignalSignup } from "./SignalSignup";
 
 const milestones = [
   ["Player movement", "complete"], ["Camera system", "complete"],
@@ -86,7 +87,7 @@ export default function Home() {
 
       <section className="signal section" id="signal">
         <div className="signal-orbit" aria-hidden="true"><span>◈</span></div><p className="kicker">05 / BLAZE SIGNAL</p><h2>THE SIGNAL<br/><i>IS OPEN.</i></h2><p>Development notes, recovered lore, prototype updates, and early pages from Beneath Eden—sent only when there is something worth discovering.</p>
-        <form className="signup"><label className="sr-only" htmlFor="email">Email address</label><input id="email" type="email" placeholder="YOUR EMAIL ADDRESS" required/><button type="submit">JOIN THE SIGNAL <span>↗</span></button></form><small>NO NOISE. NO SPOILERS. TRANSMISSION ENCRYPTION: ACTIVE.</small>
+        <SignalSignup />
       </section>
 
       <footer><a className="brand" href="#home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a><p>AN ORIGINAL UNIVERSE BY ELIJAH BLAZE STUDIOS</p><div><a href="#game">GAME</a><a href="#books">BOOKS</a><a href="#codex">CODEX</a><a href="#studio">STUDIO</a></div><small>© 2026 ELIJAH BLAZE STUDIOS</small></footer>
