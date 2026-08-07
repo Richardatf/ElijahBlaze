@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { CodexArchive } from "./CodexArchive";
 import { SignalSignup } from "./SignalSignup";
 
@@ -30,7 +31,8 @@ const comics = [
 
 export default function Home() {
   return (
-    <main>
+    <main id="main-content">
+      <a className="skip-link" href="#game">Skip to the story</a>
       <header className="nav-shell">
         <a className="brand" href="#home" aria-label="Elijah Blaze home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a>
         <nav aria-label="Primary navigation">
@@ -40,9 +42,9 @@ export default function Home() {
       </header>
 
       <section className="hero" id="home">
-        <div className="hero-atmosphere" aria-hidden="true"><div className="sun"/><div className="monolith"/><div className="signal-line"/></div>
+        <div className="hero-atmosphere" aria-hidden="true"><div className="sun"/><div className="monolith"/><div className="signal-line"/><div className="guardian-seal"><span>◈</span><small>ARCHITECTURE // ONLINE</small></div></div>
         <div className="avatar-frame">
-          <img src="/assets/elijah-blaze-avatar.png" alt="Elijah Blaze in blue-and-gold living guardian armor, crowned by flame" />
+          <Image src="/assets/elijah-blaze-avatar.png" alt="Elijah Blaze in blue-and-gold living guardian armor, crowned by flame" fill sizes="(max-width: 560px) 105vw, (max-width: 900px) 68vw, 650px" priority />
           <div className="avatar-caption"><span>GUARDIAN FORM</span><b>ELIJAH + AZEL</b></div>
         </div>
         <div className="eyebrow"><span>PROJECT AZEL</span><span className="line"/><span>TRANSMISSION 001</span></div>
@@ -52,6 +54,12 @@ export default function Home() {
         <div className="hero-actions"><a className="button primary" href="#books">Enter Beneath Eden <span>↗</span></a><a className="button text-button" href="#game">Follow development <span>↓</span></a></div>
         <div className="hero-index"><span>16-YEAR-OLD DREAMER</span><span>ARIZONA / EARTH</span><span>SYNC STATUS: <b>EMERGING</b></span></div>
       </section>
+
+      <aside className="transmission-band" aria-label="Current Elijah Blaze transmission">
+        <span>TRANSMISSION // 001</span>
+        <p><strong>BENEATH EDEN</strong> The first door is opening.</p>
+        <a href="#signal">Receive the next signal <b>↗</b></a>
+      </aside>
 
       <section className="game section" id="game">
         <div className="section-heading"><div><p className="kicker">01 / THE GAME</p><h2>THE HOLLOW<br/><i>COURT</i></h2></div><p className="lead">A third-person action prototype about intention, resonance, and surviving the first place that dreams back.</p></div>
@@ -90,7 +98,7 @@ export default function Home() {
         <SignalSignup />
       </section>
 
-      <footer><a className="brand" href="#home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a><p>AN ORIGINAL UNIVERSE BY ELIJAH BLAZE STUDIOS</p><div><a href="#game">GAME</a><a href="#books">BOOKS</a><a href="#codex">CODEX</a><a href="#studio">STUDIO</a></div><small>© 2026 ELIJAH BLAZE STUDIOS</small></footer>
+      <footer><a className="brand" href="#home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a><p>AN ORIGINAL UNIVERSE BY ELIJAH BLAZE STUDIOS</p><div><a href="#game">GAME</a><a href="#books">BENEATH EDEN</a><a href="#codex">CODEX</a><a href="#studio">STUDIO</a></div><small>© 2026 ELIJAH BLAZE STUDIOS</small></footer>
     </main>
   );
 }
