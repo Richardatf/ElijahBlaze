@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CodexArchive } from "./CodexArchive";
 import { SignalSignup } from "./SignalSignup";
+import { SyncExperience } from "./SyncExperience";
 
 const milestones = [
   ["Player movement", "complete"], ["Camera system", "complete"],
@@ -23,7 +24,7 @@ export default function Home() {
       <a className="skip-link" href="#gateway">Skip to the universe</a>
       <header className="nav-shell">
         <a className="brand" href="#home" aria-label="Elijah Blaze home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a>
-        <nav aria-label="Primary navigation"><Link href="/game">Game</Link><Link href="/books">Books</Link><Link href="/comics">Comics</Link><a href="#codex">Codex</a><a href="#studio">Studio</a></nav>
+        <nav aria-label="Primary navigation"><Link href="/game">Game</Link><Link href="/books">Books</Link><Link href="/comics">Comics</Link><a href="#synchronization">Sync</a><a href="#codex">Codex</a><a href="#studio">Studio</a></nav>
         <a className="nav-signal" href="#signal"><span />SIGNAL LIVE</a>
       </header>
 
@@ -37,7 +38,7 @@ export default function Home() {
         <h1>ELIJAH<br/><em>BLAZE</em></h1>
         <p className="hero-tag">Some dreams are not your own.</p>
         <p className="hero-copy">Elijah Blue is sixteen, curious, and increasingly haunted by dreams of a place that should not exist. Beneath the Arizona desert waits AZEL—an ancient living architecture whose sleeping mind is slowly becoming entangled with his own.</p>
-        <div className="hero-actions"><Link className="button primary" href="/books">Enter Beneath Eden <span>↗</span></Link><Link className="button text-button" href="/game">Enter the Game <span>↗</span></Link></div>
+        <div className="hero-actions"><Link className="button primary" href="/books">Enter Beneath Eden <span>↗</span></Link><a className="button text-button" href="#synchronization">Begin Synchronization <span>↓</span></a></div>
         <div className="hero-index"><span>16-YEAR-OLD DREAMER</span><span>ARIZONA / EARTH</span><span>SYNC STATUS: <b>EMERGING</b></span></div>
       </section>
 
@@ -51,6 +52,8 @@ export default function Home() {
           <article><span>03 / GAME</span><h3>The Hollow Court</h3><p>Step inside the prototype and experience the architecture as a place that reacts to intention.</p><Link className="button text-button" href="/game">Follow development ↗</Link></article>
         </div>
       </section>
+
+      <SyncExperience />
 
       <section className="game section" id="game-preview">
         <div className="section-heading"><div><p className="kicker">01 / THE GAME</p><h2>THE HOLLOW<br/><i>COURT</i></h2></div><p className="lead">A third-person action prototype about intention, resonance, and surviving the first place that dreams back.</p></div>
@@ -77,7 +80,7 @@ export default function Home() {
 
       <section className="signal section" id="signal"><div className="signal-orbit" aria-hidden="true"><span>◈</span></div><p className="kicker">05 / BLAZE SIGNAL</p><h2>THE SIGNAL<br/><i>IS OPEN.</i></h2><p>Development notes, recovered lore, prototype updates, comic reveals, and early pages from Beneath Eden—sent only when there is something worth discovering.</p><SignalSignup /></section>
 
-      <footer><a className="brand" href="#home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a><p>REMEMBER WHAT WAS FORGOTTEN.</p><div><Link href="/game">GAME</Link><Link href="/books">BOOKS</Link><Link href="/comics">COMICS</Link><a href="#codex">CODEX</a></div><small>© 2026 ELIJAH BLAZE STUDIOS</small></footer>
+      <footer><a className="brand" href="#home"><span className="brand-mark">EB</span><span>ELIJAH BLAZE</span></a><p>REMEMBER WHAT WAS FORGOTTEN.</p><div><Link href="/game">GAME</Link><Link href="/books">BOOKS</Link><Link href="/comics">COMICS</Link><a href="#synchronization">SYNC</a><a href="#codex">CODEX</a></div><small>© 2026 ELIJAH BLAZE STUDIOS</small></footer>
     </main>
   );
 }
