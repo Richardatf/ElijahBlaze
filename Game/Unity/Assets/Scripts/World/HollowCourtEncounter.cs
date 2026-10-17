@@ -12,13 +12,14 @@ namespace ElijahBlaze.World
         public event Action EncounterCleared;
         public bool IsCleared { get; private set; }
 
+        public void Configure(IEnumerable<Health> enemies)
+        {
+            encounterEnemies = new List<Health>(enemies);
+        }
+
         private void OnEnable()
         {
-            foreach (Health enemy in encounterEnemies)
-            {
-                if (enemy != null)
-                    enemy.Died += CheckEncounter;
-            }
+            Subscribe();
         }
 
         private void Start()
@@ -27,6 +28,20 @@ namespace ElijahBlaze.World
         }
 
         private void OnDisable()
+        {
+            Unsubscribe();
+        }
+
+        private void Subscribe()
+        {
+            foreach (Health enemy in encounterEnemies)
+            {
+                if (enemy != null)
+                    enemy.Died += CheckEncounter;
+            }
+        }
+
+        private void Unsubscribe()
         {
             foreach (Health enemy in encounterEnemies)
             {
@@ -37,7 +52,7 @@ namespace ElijahBlaze.World
 
         private void CheckEncounter()
         {
-            if (IsCleared)
+            if (IsCleared || encounterEnemies.Count == 0)
                 return;
 
             foreach (Health enemy in encounterEnemies)
