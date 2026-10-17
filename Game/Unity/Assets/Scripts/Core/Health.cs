@@ -1,0 +1,52 @@
+using System;
+using UnityEngine;
+
+namespace ElijahBlaze.Core
+{
+    public class Health : MonoBehaviour
+    {
+        [SerializeField, Min(1)] private int maxHealth = 3;
+
+        public int CurrentHealth { get; private set; }
+        public int MaxHealth => maxHealth;
+        public bool IsDead { get; private set; }
+
+        public event Action<int, int> Damaged;
+        public event Action Died;
+
+        private void Awake()
+        {
+            CurrentHealth = maxHealth;
+        }
+
+        public void TakeDamage(int amount)
+        {
+            if (IsDead || amount <= 0)
+                return;
+
+            CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
+            Damaged?.Invoke(CurrentHealth, maxHealth);
+
+            if (CurrentHealth == 0)
+                Die();
+        }
+
+        public void RestoreToFull()
+        {
+            if (IsDead)
+                return;
+
+            CurrentHealth = maxHealth;
+        }
+
+        private void Die()
+        {
+            if (IsDead)
+                return;
+
+            IsDead = true;
+            Died?.Invoke();
+            Debug.Log($"{gameObject.name} died.", this);
+        }
+    }
+}
