@@ -45,8 +45,15 @@ namespace ElijahBlaze.Core
                 return;
 
             IsDead = true;
+            bool hasDeathHandler = Died != null;
             Died?.Invoke();
             Debug.Log($"{gameObject.name} died.", this);
+
+            // DeathFeedback handles the enemy's visible death sequence. The player
+            // has a PlayerDeathController subscriber that restarts the scene. If
+            // neither handler is present, remove this object as a safe fallback.
+            if (!hasDeathHandler)
+                Destroy(gameObject);
         }
     }
 }
