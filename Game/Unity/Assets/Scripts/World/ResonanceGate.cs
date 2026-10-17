@@ -15,6 +15,13 @@ namespace ElijahBlaze.World
         private GateState state = GateState.Dormant;
         private Vector3 closedPosition;
 
+        public void Configure(HollowCourtEncounter sourceEncounter, Transform body, Vector3 offset)
+        {
+            encounter = sourceEncounter;
+            gateBody = body != null ? body : transform;
+            openOffset = offset;
+        }
+
         private void Awake()
         {
             if (gateBody == null)
