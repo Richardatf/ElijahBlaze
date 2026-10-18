@@ -1,4 +1,5 @@
 using ElijahBlaze.Core;
+using ElijahBlaze.Enemies;
 using UnityEngine;
 
 namespace ElijahBlaze.Player
