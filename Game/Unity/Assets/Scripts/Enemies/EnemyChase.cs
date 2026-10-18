@@ -11,6 +11,12 @@ namespace ElijahBlaze.Enemies
 
         public void SetTarget(Transform chaseTarget) => target = chaseTarget;
 
+        public void Configure(float speed, float distanceToStop)
+        {
+            moveSpeed = speed;
+            stopDistance = distanceToStop;
+        }
+
         private void Update()
         {
             if (target == null)

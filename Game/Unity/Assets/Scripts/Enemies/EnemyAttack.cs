@@ -14,6 +14,13 @@ namespace ElijahBlaze.Enemies
 
         public void SetTarget(Transform attackTarget) => target = attackTarget;
 
+        public void Configure(float distance, float attackCooldown, int damageAmount)
+        {
+            attackDistance = distance;
+            cooldown = attackCooldown;
+            damage = damageAmount;
+        }
+
         private void Update()
         {
             if (target == null || Time.time < nextAttackTime)

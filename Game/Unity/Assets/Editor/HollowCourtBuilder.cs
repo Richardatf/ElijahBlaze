@@ -17,6 +17,8 @@ namespace ElijahBlaze.EditorTools
         private const string SceneFolder = "Assets/Scenes";
         private const string ScenePath = SceneFolder + "/HollowCourt.unity";
 
+        private enum ShardlingForm { Runner, Bulwark, Harrier }
+
         [MenuItem("Elijah Blaze/Build Hollow Court Prototype")]
         public static void Build()
         {
@@ -28,7 +30,12 @@ namespace ElijahBlaze.EditorTools
 
             Material stone = CreateMaterial("Hollow Basalt", new Color(0.075f, 0.095f, 0.12f));
             Material architecture = CreateMaterial("Living Architecture", new Color(0.16f, 0.27f, 0.34f));
-            Material shard = CreateMaterial("Shardling", new Color(0.34f, 0.12f, 0.075f));
+            Material runnerShell = CreateMaterial("Shardling Cinder Shell", new Color(0.36f, 0.12f, 0.055f));
+            Material runnerCore = CreateMaterial("Shardling Cinder Heart", new Color(1f, 0.28f, 0.06f), true);
+            Material bulwarkShell = CreateMaterial("Shardling Umber Shell", new Color(0.22f, 0.09f, 0.075f));
+            Material bulwarkCore = CreateMaterial("Shardling Umber Heart", new Color(0.92f, 0.22f, 0.08f), true);
+            Material harrierShell = CreateMaterial("Shardling Slate Shell", new Color(0.16f, 0.22f, 0.25f));
+            Material harrierCore = CreateMaterial("Shardling Slate Heart", new Color(0.25f, 0.82f, 0.9f), true);
             Material playerMaterial = CreateMaterial("Elijah Blue", new Color(0.08f, 0.3f, 0.68f));
             Material gateMaterial = CreateMaterial("Resonance Gate", new Color(0.62f, 0.4f, 0.12f), true);
             Material inlayMaterial = CreateMaterial("Resonance Inlay", new Color(0.22f, 0.48f, 0.54f), true);
@@ -40,9 +47,9 @@ namespace ElijahBlaze.EditorTools
             CreateCamera(player.transform);
 
             var enemyHealth = new List<Health>();
-            enemyHealth.Add(CreateShardling(new Vector3(-5f, 1f, 2f), player.transform, shard, "Shardling_A"));
-            enemyHealth.Add(CreateShardling(new Vector3(0f, 1f, 5f), player.transform, shard, "Shardling_B"));
-            enemyHealth.Add(CreateShardling(new Vector3(5f, 1f, 2f), player.transform, shard, "Shardling_C"));
+            enemyHealth.Add(CreateShardling(new Vector3(-5f, 0.75f, 2f), player.transform, runnerShell, runnerCore, "Shardling_CinderRunner", ShardlingForm.Runner, 3.4f, 1.0f));
+            enemyHealth.Add(CreateShardling(new Vector3(0f, 0.75f, 5f), player.transform, bulwarkShell, bulwarkCore, "Shardling_Bulwark", ShardlingForm.Bulwark, 1.9f, 1.55f));
+            enemyHealth.Add(CreateShardling(new Vector3(5f, 0.75f, 2f), player.transform, harrierShell, harrierCore, "Shardling_Harrier", ShardlingForm.Harrier, 2.8f, 0.8f));
 
             GameObject encounterObject = new GameObject("HollowCourt_Encounter");
             HollowCourtEncounter encounter = encounterObject.AddComponent<HollowCourtEncounter>();
@@ -199,23 +206,88 @@ namespace ElijahBlaze.EditorTools
             EditorUtility.SetDirty(follow);
         }
 
-        private static Health CreateShardling(Vector3 position, Transform target, Material material, string name)
+        private static Health CreateShardling(
+            Vector3 position,
+            Transform target,
+            Material shellMaterial,
+            Material coreMaterial,
+            string name,
+            ShardlingForm form,
+            float moveSpeed,
+            float attackCooldown)
         {
             GameObject enemy = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             enemy.name = name;
             enemy.transform.position = position;
-            enemy.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-            enemy.GetComponent<Renderer>().sharedMaterial = material;
+            enemy.GetComponent<Renderer>().enabled = false;
+
+            CapsuleCollider bodyCollider = enemy.GetComponent<CapsuleCollider>();
+            bodyCollider.radius = 0.43f;
+            bodyCollider.height = 1.55f;
+
+            AddShardlingForm(enemy.transform, form, shellMaterial, coreMaterial);
 
             Health health = enemy.AddComponent<Health>();
             EnemyChase chase = enemy.AddComponent<EnemyChase>();
             EnemyAttack attack = enemy.AddComponent<EnemyAttack>();
             enemy.AddComponent<DeathFeedback>();
             chase.SetTarget(target);
+            chase.Configure(moveSpeed, 1.7f);
             attack.SetTarget(target);
+            attack.Configure(1.95f, attackCooldown, 1);
             EditorUtility.SetDirty(chase);
             EditorUtility.SetDirty(attack);
             return health;
+        }
+
+        private static void AddShardlingForm(Transform root, ShardlingForm form, Material shell, Material core)
+        {
+            // Each creature is assembled from angular stone fragments around a visible living heart.
+            CreateShardPart(root, "Fractured_Core", PrimitiveType.Cube, new Vector3(0f, 0.02f, 0f), new Vector3(0.52f, 0.78f, 0.48f), new Vector3(8f, 45f, 12f), shell);
+            CreateShardPart(root, "Living_Heart", PrimitiveType.Sphere, new Vector3(0f, 0.08f, 0.31f), new Vector3(0.2f, 0.24f, 0.12f), Vector3.zero, core);
+
+            if (form == ShardlingForm.Runner)
+            {
+                CreateShardPart(root, "Runner_Left_Fin", PrimitiveType.Cube, new Vector3(-0.39f, 0.16f, -0.04f), new Vector3(0.3f, 0.78f, 0.3f), new Vector3(0f, 0f, -28f), shell);
+                CreateShardPart(root, "Runner_Right_Fin", PrimitiveType.Cube, new Vector3(0.39f, 0.16f, -0.04f), new Vector3(0.3f, 0.78f, 0.3f), new Vector3(0f, 0f, 28f), shell);
+                CreateShardPart(root, "Runner_Crown", PrimitiveType.Cube, new Vector3(0f, 0.72f, -0.02f), new Vector3(0.2f, 0.42f, 0.22f), new Vector3(0f, 0f, 12f), shell);
+                CreateShardPart(root, "Runner_Tail_Shards", PrimitiveType.Cube, new Vector3(0f, -0.35f, -0.42f), new Vector3(0.22f, 0.52f, 0.24f), new Vector3(35f, 0f, 0f), shell);
+            }
+            else if (form == ShardlingForm.Bulwark)
+            {
+                CreateShardPart(root, "Bulwark_Left_Shoulder", PrimitiveType.Cube, new Vector3(-0.48f, 0.28f, 0f), new Vector3(0.52f, 0.56f, 0.52f), new Vector3(0f, 0f, -12f), shell);
+                CreateShardPart(root, "Bulwark_Right_Shoulder", PrimitiveType.Cube, new Vector3(0.48f, 0.28f, 0f), new Vector3(0.52f, 0.56f, 0.52f), new Vector3(0f, 0f, 12f), shell);
+                CreateShardPart(root, "Bulwark_Left_Arm", PrimitiveType.Cube, new Vector3(-0.55f, -0.25f, 0.04f), new Vector3(0.3f, 0.68f, 0.34f), new Vector3(0f, 0f, -18f), shell);
+                CreateShardPart(root, "Bulwark_Right_Arm", PrimitiveType.Cube, new Vector3(0.55f, -0.25f, 0.04f), new Vector3(0.3f, 0.68f, 0.34f), new Vector3(0f, 0f, 18f), shell);
+                CreateShardPart(root, "Bulwark_Crown", PrimitiveType.Cube, new Vector3(0f, 0.72f, -0.02f), new Vector3(0.28f, 0.3f, 0.28f), new Vector3(0f, 45f, 0f), shell);
+            }
+            else
+            {
+                CreateShardPart(root, "Harrier_Left_Blade", PrimitiveType.Cube, new Vector3(-0.43f, 0.05f, 0f), new Vector3(0.2f, 1.0f, 0.28f), new Vector3(0f, 0f, -20f), shell);
+                CreateShardPart(root, "Harrier_Right_Blade", PrimitiveType.Cube, new Vector3(0.43f, 0.05f, 0f), new Vector3(0.2f, 1.0f, 0.28f), new Vector3(0f, 0f, 20f), shell);
+                CreateShardPart(root, "Harrier_Crest", PrimitiveType.Cube, new Vector3(0f, 0.8f, -0.04f), new Vector3(0.18f, 0.56f, 0.2f), new Vector3(18f, 0f, 0f), shell);
+                CreateShardPart(root, "Harrier_Lower_Shard", PrimitiveType.Cube, new Vector3(0f, -0.47f, 0.02f), new Vector3(0.38f, 0.28f, 0.34f), new Vector3(0f, 45f, 0f), shell);
+            }
+        }
+
+        private static GameObject CreateShardPart(
+            Transform parent,
+            string name,
+            PrimitiveType primitive,
+            Vector3 localPosition,
+            Vector3 localScale,
+            Vector3 localRotation,
+            Material material)
+        {
+            GameObject part = GameObject.CreatePrimitive(primitive);
+            part.name = name;
+            Object.DestroyImmediate(part.GetComponent<Collider>());
+            part.transform.SetParent(parent, false);
+            part.transform.localPosition = localPosition;
+            part.transform.localRotation = Quaternion.Euler(localRotation);
+            part.transform.localScale = localScale;
+            part.GetComponent<Renderer>().sharedMaterial = material;
+            return part;
         }
 
         private static void CreateGate(HollowCourtEncounter encounter, Material material)
