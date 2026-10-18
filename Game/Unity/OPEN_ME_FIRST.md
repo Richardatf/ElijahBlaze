@@ -18,6 +18,7 @@ After Unity finishes importing and there are no compile errors:
 ## Prototype controls
 - Move: WASD / arrow keys
 - Attack: left mouse or Space
+- Guard: hold Left Shift or right mouse button; blocks attacks from in front, with a short recovery after each successful block
 
 ## First loop
 Enter the court → survive three Shardlings → defeat the encounter → the Resonance Gate rises.

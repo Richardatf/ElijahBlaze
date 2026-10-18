@@ -34,7 +34,7 @@ namespace ElijahBlaze.Enemies
                 return;
 
             nextAttackTime = Time.time + cooldown;
-            health.TakeDamage(damage);
+            health.TakeDamage(damage, transform);
         }
     }
 }

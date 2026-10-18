@@ -36,14 +36,18 @@ namespace ElijahBlaze.EditorTools
             Material bulwarkCore = CreateMaterial("Shardling Umber Heart", new Color(0.92f, 0.22f, 0.08f), true);
             Material harrierShell = CreateMaterial("Shardling Slate Shell", new Color(0.16f, 0.22f, 0.25f));
             Material harrierCore = CreateMaterial("Shardling Slate Heart", new Color(0.25f, 0.82f, 0.9f), true);
-            Material playerMaterial = CreateMaterial("Elijah Blue", new Color(0.08f, 0.3f, 0.68f));
+            Material playerBlue = CreateMaterial("Elijah Blaze Blue Armor", new Color(0.045f, 0.19f, 0.52f));
+            Material playerGold = CreateMaterial("Guardian Gold", new Color(0.95f, 0.62f, 0.12f), true);
+            Material playerSilver = CreateMaterial("Guardian Pale Blue", new Color(0.38f, 0.72f, 0.94f));
+            Material playerFlame = CreateMaterial("Guardian Flame", new Color(1f, 0.22f, 0.035f), true);
+            Material shieldMaterial = CreateMaterial("Guardian Defense Field", new Color(0.16f, 0.68f, 1f), true);
             Material gateMaterial = CreateMaterial("Resonance Gate", new Color(0.62f, 0.4f, 0.12f), true);
             Material inlayMaterial = CreateMaterial("Resonance Inlay", new Color(0.22f, 0.48f, 0.54f), true);
 
             CreateLighting(gateMaterial);
             CreateCourt(stone, architecture, inlayMaterial);
 
-            GameObject player = CreatePlayer(playerMaterial);
+            GameObject player = CreatePlayer(playerBlue, playerGold, playerSilver, playerFlame, shieldMaterial);
             CreateCamera(player.transform);
 
             var enemyHealth = new List<Health>();
@@ -178,19 +182,78 @@ namespace ElijahBlaze.EditorTools
             CreateInlay("Gate_Crown_Inlay", new Vector3(0f, 6.53f, 14.68f), new Vector3(2.7f, 0.08f, 0.08f), inlay);
         }
 
-        private static GameObject CreatePlayer(Material material)
+        private static GameObject CreatePlayer(Material blue, Material gold, Material silver, Material flame, Material shieldMaterial)
         {
             GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             player.name = "ElijahBlue_Player";
             player.transform.position = new Vector3(0f, 1f, -10f);
+            player.GetComponent<Renderer>().enabled = false;
             Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
-            player.GetComponent<Renderer>().sharedMaterial = material;
-            player.AddComponent<CharacterController>();
+
+            CharacterController controller = player.AddComponent<CharacterController>();
+            controller.height = 2f;
+            controller.radius = 0.38f;
             player.AddComponent<Health>();
             player.AddComponent<PlayerController>();
             player.AddComponent<PlayerAttack>();
+
+            // A compact blue-and-gold guardian silhouette: armored torso, limbs,
+            // crowned helm, rising flame, and a visible trident-like chest mark.
+            CreatePlayerPart(player.transform, "Blue_Armored_Torso", PrimitiveType.Capsule, new Vector3(0f, 0.04f, 0f), new Vector3(0.68f, 0.52f, 0.42f), Vector3.zero, blue);
+            CreatePlayerPart(player.transform, "Gold_Waist_Guard", PrimitiveType.Cube, new Vector3(0f, -0.34f, 0.015f), new Vector3(0.5f, 0.2f, 0.4f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Silver_Chest_Plate", PrimitiveType.Cube, new Vector3(0f, 0.2f, 0.21f), new Vector3(0.39f, 0.42f, 0.065f), Vector3.zero, silver);
+
+            CreatePlayerPart(player.transform, "Left_Gold_Shoulder", PrimitiveType.Sphere, new Vector3(-0.43f, 0.32f, 0f), new Vector3(0.31f, 0.3f, 0.34f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Right_Gold_Shoulder", PrimitiveType.Sphere, new Vector3(0.43f, 0.32f, 0f), new Vector3(0.31f, 0.3f, 0.34f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Left_Arm", PrimitiveType.Capsule, new Vector3(-0.49f, -0.02f, 0f), new Vector3(0.19f, 0.38f, 0.2f), new Vector3(0f, 0f, -8f), blue);
+            CreatePlayerPart(player.transform, "Right_Arm", PrimitiveType.Capsule, new Vector3(0.49f, -0.02f, 0f), new Vector3(0.19f, 0.38f, 0.2f), new Vector3(0f, 0f, 8f), blue);
+            CreatePlayerPart(player.transform, "Left_Gauntlet", PrimitiveType.Cube, new Vector3(-0.52f, -0.31f, 0.04f), new Vector3(0.22f, 0.16f, 0.24f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Right_Gauntlet", PrimitiveType.Cube, new Vector3(0.52f, -0.31f, 0.04f), new Vector3(0.22f, 0.16f, 0.24f), Vector3.zero, gold);
+
+            CreatePlayerPart(player.transform, "Left_Leg", PrimitiveType.Capsule, new Vector3(-0.2f, -0.58f, 0f), new Vector3(0.22f, 0.4f, 0.24f), Vector3.zero, blue);
+            CreatePlayerPart(player.transform, "Right_Leg", PrimitiveType.Capsule, new Vector3(0.2f, -0.58f, 0f), new Vector3(0.22f, 0.4f, 0.24f), Vector3.zero, blue);
+            CreatePlayerPart(player.transform, "Left_Greave", PrimitiveType.Cube, new Vector3(-0.2f, -0.61f, 0.15f), new Vector3(0.19f, 0.34f, 0.1f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Right_Greave", PrimitiveType.Cube, new Vector3(0.2f, -0.61f, 0.15f), new Vector3(0.19f, 0.34f, 0.1f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Left_Boot", PrimitiveType.Cube, new Vector3(-0.2f, -0.89f, 0.06f), new Vector3(0.3f, 0.16f, 0.42f), Vector3.zero, silver);
+            CreatePlayerPart(player.transform, "Right_Boot", PrimitiveType.Cube, new Vector3(0.2f, -0.89f, 0.06f), new Vector3(0.3f, 0.16f, 0.42f), Vector3.zero, silver);
+
+            CreatePlayerPart(player.transform, "Guardian_Helm", PrimitiveType.Sphere, new Vector3(0f, 0.76f, 0f), new Vector3(0.39f, 0.42f, 0.35f), Vector3.zero, blue);
+            CreatePlayerPart(player.transform, "Gold_Helm_Brow", PrimitiveType.Cube, new Vector3(0f, 0.68f, 0.29f), new Vector3(0.44f, 0.08f, 0.06f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Helm_Crest", PrimitiveType.Cube, new Vector3(0f, 1.04f, -0.02f), new Vector3(0.13f, 0.35f, 0.16f), new Vector3(12f, 0f, 0f), gold);
+            CreatePlayerPart(player.transform, "Rising_Flame", PrimitiveType.Sphere, new Vector3(0f, 1.29f, -0.02f), new Vector3(0.2f, 0.34f, 0.16f), new Vector3(0f, 0f, -12f), flame);
+
+            // The three bars form a small trident mark centered on the breastplate.
+            CreatePlayerPart(player.transform, "Chest_Sigil_Stem", PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.255f), new Vector3(0.045f, 0.29f, 0.035f), Vector3.zero, gold);
+            CreatePlayerPart(player.transform, "Chest_Sigil_Left", PrimitiveType.Cube, new Vector3(-0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, -35f), gold);
+            CreatePlayerPart(player.transform, "Chest_Sigil_Right", PrimitiveType.Cube, new Vector3(0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, 35f), gold);
+
+            GameObject guardVisual = CreatePlayerPart(player.transform, "Guardian_Guard_Field", PrimitiveType.Sphere, new Vector3(0f, 0.05f, 0.64f), new Vector3(1.15f, 1.72f, 0.2f), Vector3.zero, shieldMaterial);
+            guardVisual.SetActive(false);
+            PlayerDefense defense = player.AddComponent<PlayerDefense>();
+            defense.Configure(guardVisual);
             player.AddComponent<PlayerDeathController>();
+            EditorUtility.SetDirty(defense);
             return player;
+        }
+
+        private static GameObject CreatePlayerPart(
+            Transform parent,
+            string name,
+            PrimitiveType primitive,
+            Vector3 localPosition,
+            Vector3 localScale,
+            Vector3 localRotation,
+            Material material)
+        {
+            GameObject part = GameObject.CreatePrimitive(primitive);
+            part.name = name;
+            Object.DestroyImmediate(part.GetComponent<Collider>());
+            part.transform.SetParent(parent, false);
+            part.transform.localPosition = localPosition;
+            part.transform.localRotation = Quaternion.Euler(localRotation);
+            part.transform.localScale = localScale;
+            part.GetComponent<Renderer>().sharedMaterial = material;
+            return part;
         }
 
         private static void CreateCamera(Transform target)

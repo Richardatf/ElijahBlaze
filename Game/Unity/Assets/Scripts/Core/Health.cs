@@ -3,6 +3,11 @@ using UnityEngine;
 
 namespace ElijahBlaze.Core
 {
+    public interface IDamageInterceptor
+    {
+        bool TryInterceptDamage(int amount, Transform attacker);
+    }
+
     public class Health : MonoBehaviour
     {
         [SerializeField, Min(1)] private int maxHealth = 3;
@@ -21,8 +26,22 @@ namespace ElijahBlaze.Core
 
         public void TakeDamage(int amount)
         {
+            TakeDamage(amount, null);
+        }
+
+        public void TakeDamage(int amount, Transform attacker)
+        {
             if (IsDead || amount <= 0)
                 return;
+
+            foreach (MonoBehaviour behaviour in GetComponents<MonoBehaviour>())
+            {
+                if (behaviour is IDamageInterceptor interceptor && interceptor.TryInterceptDamage(amount, attacker))
+                {
+                    Debug.Log(gameObject.name + " blocked an incoming hit.", this);
+                    return;
+                }
+            }
 
             CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
             Damaged?.Invoke(CurrentHealth, maxHealth);
