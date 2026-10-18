@@ -211,35 +211,42 @@ namespace ElijahBlaze.EditorTools
             controller.radius = 0.38f;
             player.AddComponent<Health>();
             player.AddComponent<PlayerController>();
+            player.AddComponent<PlayerProceduralMotion>();
             player.AddComponent<PlayerAttack>();
 
-            // A compact blue-and-gold guardian silhouette: armored torso, limbs,
-            // crowned helm, rising flame, and a visible trident-like chest mark.
-            CreatePlayerPart(player.transform, "Blue_Armored_Torso", PrimitiveType.Capsule, new Vector3(0f, 0.04f, 0f), new Vector3(0.68f, 0.52f, 0.42f), Vector3.zero, blue);
-            CreatePlayerPart(player.transform, "Gold_Waist_Guard", PrimitiveType.Cube, new Vector3(0f, -0.34f, 0.015f), new Vector3(0.5f, 0.2f, 0.4f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Silver_Chest_Plate", PrimitiveType.Cube, new Vector3(0f, 0.2f, 0.21f), new Vector3(0.39f, 0.42f, 0.065f), Vector3.zero, silver);
+            // Keep the torso and head on one lightly animated visual root.
+            Transform upperBody = CreatePlayerPivot(player.transform, "Guardian_Upper_Body", Vector3.zero);
+            CreatePlayerPart(upperBody, "Blue_Armored_Torso", PrimitiveType.Capsule, new Vector3(0f, 0.04f, 0f), new Vector3(0.68f, 0.52f, 0.42f), Vector3.zero, blue);
+            CreatePlayerPart(upperBody, "Gold_Waist_Guard", PrimitiveType.Cube, new Vector3(0f, -0.34f, 0.015f), new Vector3(0.5f, 0.2f, 0.4f), Vector3.zero, gold);
+            CreatePlayerPart(upperBody, "Silver_Chest_Plate", PrimitiveType.Cube, new Vector3(0f, 0.2f, 0.21f), new Vector3(0.39f, 0.42f, 0.065f), Vector3.zero, silver);
 
-            CreatePlayerPart(player.transform, "Left_Gold_Shoulder", PrimitiveType.Sphere, new Vector3(-0.43f, 0.32f, 0f), new Vector3(0.31f, 0.3f, 0.34f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Right_Gold_Shoulder", PrimitiveType.Sphere, new Vector3(0.43f, 0.32f, 0f), new Vector3(0.31f, 0.3f, 0.34f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Left_Arm", PrimitiveType.Capsule, new Vector3(-0.49f, -0.02f, 0f), new Vector3(0.19f, 0.38f, 0.2f), new Vector3(0f, 0f, -8f), blue);
-            CreatePlayerPart(player.transform, "Right_Arm", PrimitiveType.Capsule, new Vector3(0.49f, -0.02f, 0f), new Vector3(0.19f, 0.38f, 0.2f), new Vector3(0f, 0f, 8f), blue);
-            CreatePlayerPart(player.transform, "Left_Gauntlet", PrimitiveType.Cube, new Vector3(-0.52f, -0.31f, 0.04f), new Vector3(0.22f, 0.16f, 0.24f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Right_Gauntlet", PrimitiveType.Cube, new Vector3(0.52f, -0.31f, 0.04f), new Vector3(0.22f, 0.16f, 0.24f), Vector3.zero, gold);
+            CreatePlayerPart(upperBody, "Left_Gold_Shoulder", PrimitiveType.Sphere, new Vector3(-0.43f, 0.32f, 0f), new Vector3(0.31f, 0.3f, 0.34f), Vector3.zero, gold);
+            CreatePlayerPart(upperBody, "Right_Gold_Shoulder", PrimitiveType.Sphere, new Vector3(0.43f, 0.32f, 0f), new Vector3(0.31f, 0.3f, 0.34f), Vector3.zero, gold);
 
-            CreatePlayerPart(player.transform, "Left_Leg", PrimitiveType.Capsule, new Vector3(-0.2f, -0.58f, 0f), new Vector3(0.22f, 0.4f, 0.24f), Vector3.zero, blue);
-            CreatePlayerPart(player.transform, "Right_Leg", PrimitiveType.Capsule, new Vector3(0.2f, -0.58f, 0f), new Vector3(0.22f, 0.4f, 0.24f), Vector3.zero, blue);
-            CreatePlayerPart(player.transform, "Left_Greave", PrimitiveType.Cube, new Vector3(-0.2f, -0.61f, 0.15f), new Vector3(0.19f, 0.34f, 0.1f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Right_Greave", PrimitiveType.Cube, new Vector3(0.2f, -0.61f, 0.15f), new Vector3(0.19f, 0.34f, 0.1f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Left_Boot", PrimitiveType.Cube, new Vector3(-0.2f, -0.89f, 0.06f), new Vector3(0.3f, 0.16f, 0.42f), Vector3.zero, silver);
-            CreatePlayerPart(player.transform, "Right_Boot", PrimitiveType.Cube, new Vector3(0.2f, -0.89f, 0.06f), new Vector3(0.3f, 0.16f, 0.42f), Vector3.zero, silver);
+            Transform leftArmPivot = CreatePlayerPivot(upperBody, "Left_Arm_Pivot", new Vector3(-0.43f, 0.32f, 0f));
+            Transform rightArmPivot = CreatePlayerPivot(upperBody, "Right_Arm_Pivot", new Vector3(0.43f, 0.32f, 0f));
+            CreatePlayerPart(leftArmPivot, "Left_Arm", PrimitiveType.Capsule, new Vector3(-0.06f, -0.34f, 0f), new Vector3(0.19f, 0.38f, 0.2f), new Vector3(0f, 0f, -8f), blue);
+            CreatePlayerPart(rightArmPivot, "Right_Arm", PrimitiveType.Capsule, new Vector3(0.06f, -0.34f, 0f), new Vector3(0.19f, 0.38f, 0.2f), new Vector3(0f, 0f, 8f), blue);
+            CreatePlayerPart(leftArmPivot, "Left_Gauntlet", PrimitiveType.Cube, new Vector3(-0.09f, -0.62f, 0.04f), new Vector3(0.22f, 0.16f, 0.24f), Vector3.zero, gold);
+            CreatePlayerPart(rightArmPivot, "Right_Gauntlet", PrimitiveType.Cube, new Vector3(0.09f, -0.62f, 0.04f), new Vector3(0.22f, 0.16f, 0.24f), Vector3.zero, gold);
 
-            CreatePlayerPart(player.transform, "Guardian_Helm", PrimitiveType.Sphere, new Vector3(0f, 0.76f, 0f), new Vector3(0.39f, 0.42f, 0.35f), Vector3.zero, blue);
-            CreatePlayerPart(player.transform, "Gold_Helm_Brow", PrimitiveType.Cube, new Vector3(0f, 0.68f, 0.29f), new Vector3(0.44f, 0.08f, 0.06f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Helm_Crest", PrimitiveType.Cube, new Vector3(0f, 1.04f, -0.02f), new Vector3(0.13f, 0.35f, 0.16f), new Vector3(12f, 0f, 0f), gold);
-            CreatePlayerPart(player.transform, "Rising_Flame", PrimitiveType.Sphere, new Vector3(0f, 1.29f, -0.02f), new Vector3(0.2f, 0.34f, 0.16f), new Vector3(0f, 0f, -12f), flame);
+            Transform leftLegPivot = CreatePlayerPivot(player.transform, "Left_Leg_Pivot", new Vector3(-0.2f, -0.34f, 0f));
+            Transform rightLegPivot = CreatePlayerPivot(player.transform, "Right_Leg_Pivot", new Vector3(0.2f, -0.34f, 0f));
+            CreatePlayerPart(leftLegPivot, "Left_Leg", PrimitiveType.Capsule, new Vector3(0f, -0.24f, 0f), new Vector3(0.22f, 0.4f, 0.24f), Vector3.zero, blue);
+            CreatePlayerPart(rightLegPivot, "Right_Leg", PrimitiveType.Capsule, new Vector3(0f, -0.24f, 0f), new Vector3(0.22f, 0.4f, 0.24f), Vector3.zero, blue);
+            CreatePlayerPart(leftLegPivot, "Left_Greave", PrimitiveType.Cube, new Vector3(0f, -0.27f, 0.15f), new Vector3(0.19f, 0.34f, 0.1f), Vector3.zero, gold);
+            CreatePlayerPart(rightLegPivot, "Right_Greave", PrimitiveType.Cube, new Vector3(0f, -0.27f, 0.15f), new Vector3(0.19f, 0.34f, 0.1f), Vector3.zero, gold);
+            CreatePlayerPart(leftLegPivot, "Left_Boot", PrimitiveType.Cube, new Vector3(0f, -0.55f, 0.06f), new Vector3(0.3f, 0.16f, 0.42f), Vector3.zero, silver);
+            CreatePlayerPart(rightLegPivot, "Right_Boot", PrimitiveType.Cube, new Vector3(0f, -0.55f, 0.06f), new Vector3(0.3f, 0.16f, 0.42f), Vector3.zero, silver);
+
+            Transform headPivot = CreatePlayerPivot(upperBody, "Guardian_Head_Pivot", new Vector3(0f, 0.63f, 0f));
+            CreatePlayerPart(headPivot, "Guardian_Helm", PrimitiveType.Sphere, new Vector3(0f, 0.13f, 0f), new Vector3(0.39f, 0.42f, 0.35f), Vector3.zero, blue);
+            CreatePlayerPart(headPivot, "Gold_Helm_Brow", PrimitiveType.Cube, new Vector3(0f, 0.05f, 0.29f), new Vector3(0.44f, 0.08f, 0.06f), Vector3.zero, gold);
+            CreatePlayerPart(headPivot, "Helm_Crest", PrimitiveType.Cube, new Vector3(0f, 0.41f, -0.02f), new Vector3(0.13f, 0.35f, 0.16f), new Vector3(12f, 0f, 0f), gold);
+            CreatePlayerPart(headPivot, "Rising_Flame", PrimitiveType.Sphere, new Vector3(0f, 0.66f, -0.02f), new Vector3(0.2f, 0.34f, 0.16f), new Vector3(0f, 0f, -12f), flame);
 
             // The three bars form a small trident mark centered on the breastplate.
-            CreatePlayerPart(player.transform, "Chest_Sigil_Stem", PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.255f), new Vector3(0.045f, 0.29f, 0.035f), Vector3.zero, gold);
+            CreatePlayerPart(upperBody, "Chest_Sigil_Stem", PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.255f), new Vector3(0.045f, 0.29f, 0.035f), Vector3.zero, gold);
             CreatePlayerPart(player.transform, "Chest_Sigil_Left", PrimitiveType.Cube, new Vector3(-0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, -35f), gold);
             CreatePlayerPart(player.transform, "Chest_Sigil_Right", PrimitiveType.Cube, new Vector3(0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, 35f), gold);
 
@@ -250,6 +257,14 @@ namespace ElijahBlaze.EditorTools
             player.AddComponent<PlayerDeathController>();
             EditorUtility.SetDirty(defense);
             return player;
+        }
+
+        private static Transform CreatePlayerPivot(Transform parent, string name, Vector3 localPosition)
+        {
+            GameObject pivot = new GameObject(name);
+            pivot.transform.SetParent(parent, false);
+            pivot.transform.localPosition = localPosition;
+            return pivot.transform;
         }
 
         private static GameObject CreatePlayerPart(
