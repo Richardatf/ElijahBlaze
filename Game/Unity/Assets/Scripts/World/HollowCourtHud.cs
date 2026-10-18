@@ -1,3 +1,4 @@
+using ElijahBlaze.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,14 +8,17 @@ namespace ElijahBlaze.World
     public class HollowCourtHud : MonoBehaviour
     {
         [SerializeField] private HollowCourtEncounter encounter;
+        [SerializeField] private Health playerHealth;
 
         private Text chapterLabel;
+        private Text vitalityLabel;
         private Text objectiveLabel;
         private Text instructionLabel;
 
-        public void Configure(HollowCourtEncounter source)
+        public void Configure(HollowCourtEncounter source, Health health)
         {
             encounter = source;
+            playerHealth = health;
         }
 
         private void Awake()
@@ -31,6 +35,12 @@ namespace ElijahBlaze.World
             encounter.ProgressChanged += HandleProgressChanged;
             encounter.EncounterCleared += Refresh;
             encounter.LevelCompleted += Refresh;
+
+            if (playerHealth != null)
+            {
+                playerHealth.Damaged += HandlePlayerHealthChanged;
+                playerHealth.Died += Refresh;
+            }
         }
 
         private void Start()
@@ -47,6 +57,12 @@ namespace ElijahBlaze.World
             encounter.ProgressChanged -= HandleProgressChanged;
             encounter.EncounterCleared -= Refresh;
             encounter.LevelCompleted -= Refresh;
+
+            if (playerHealth != null)
+            {
+                playerHealth.Damaged -= HandlePlayerHealthChanged;
+                playerHealth.Died -= Refresh;
+            }
         }
 
         private void HandleProgressChanged(int defeated, int total)
@@ -54,8 +70,20 @@ namespace ElijahBlaze.World
             Refresh();
         }
 
+        private void HandlePlayerHealthChanged(int currentHealth, int maxHealth)
+        {
+            Refresh();
+        }
+
         private void Refresh()
         {
+            if (playerHealth != null && vitalityLabel != null)
+            {
+                vitalityLabel.text = playerHealth.IsDead
+                    ? "VITALITY  0 / " + playerHealth.MaxHealth
+                    : "VITALITY  " + playerHealth.CurrentHealth + " / " + playerHealth.MaxHealth;
+            }
+
             if (encounter == null || objectiveLabel == null)
                 return;
 
@@ -118,7 +146,11 @@ namespace ElijahBlaze.World
             accentImage.raycastTarget = false;
 
             chapterLabel = CreateLabel("Chapter_Label", panel, font, 14, FontStyle.Bold, new Color(0.42f, 0.88f, 0.96f, 1f));
-            SetTopLeft(chapterLabel.rectTransform, new Vector2(22f, -14f), new Vector2(456f, 24f));
+            SetTopLeft(chapterLabel.rectTransform, new Vector2(22f, -14f), new Vector2(330f, 24f));
+
+            vitalityLabel = CreateLabel("Vitality_Label", panel, font, 14, FontStyle.Bold, new Color(1f, 0.78f, 0.36f, 1f));
+            vitalityLabel.alignment = TextAnchor.MiddleRight;
+            SetTopRight(vitalityLabel.rectTransform, new Vector2(-20f, -14f), new Vector2(138f, 24f));
 
             objectiveLabel = CreateLabel("Objective_Label", panel, font, 23, FontStyle.Bold, Color.white);
             SetTopLeft(objectiveLabel.rectTransform, new Vector2(22f, -43f), new Vector2(456f, 48f));
@@ -154,6 +186,15 @@ namespace ElijahBlaze.World
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+        }
+
+        private static void SetTopRight(RectTransform rect, Vector2 position, Vector2 size)
+        {
+            rect.anchorMin = new Vector2(1f, 1f);
+            rect.anchorMax = new Vector2(1f, 1f);
+            rect.pivot = new Vector2(1f, 1f);
             rect.anchoredPosition = position;
             rect.sizeDelta = size;
         }
