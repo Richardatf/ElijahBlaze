@@ -3,7 +3,7 @@
 This folder is now the canonical Unity project for the game.
 
 ## Add it to Unity Hub
-1. Pull the latest `main` branch in GitHub Desktop.
+1. In GitHub Desktop, pull and check out the latest `codex/hc-001-health-death-fallback` branch.
 2. Open Unity Hub.
 3. Click **Add** / **Add project from disk**.
 4. Select this folder: `ElijahBlaze/Game/Unity`.
@@ -17,9 +17,8 @@ After Unity finishes importing and there are no compile errors:
 
 ## Prototype controls
 - Move: WASD / arrow keys
-- Attack: left mouse or Space; three hits defeat a Shardling, and each hit briefly stuns it
-- Guard: hold Left Shift or right mouse button; blocks attacks from in front, with a short recovery after each successful block
-- Guard: hold Left Shift or right mouse button; blocks attacks from in front, with a short recovery after each successful block
+- Attack: hold left mouse or Space to swing repeatedly; three hits defeat a Shardling, and each hit briefly stuns it
+- Guard: hold Left Shift, Right Shift, or right mouse button to block the next incoming Shardling hit from any side; a short recovery follows each block
 
 ## First loop
 Enter the court → survive three Shardlings → defeat the encounter → the Resonance Gate rises.
