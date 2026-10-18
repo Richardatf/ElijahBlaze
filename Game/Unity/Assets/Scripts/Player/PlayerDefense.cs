@@ -7,7 +7,6 @@ namespace ElijahBlaze.Player
     public class PlayerDefense : MonoBehaviour, IDamageInterceptor
     {
         [SerializeField, Min(0.05f)] private float recoveryAfterBlock = 0.38f;
-        [SerializeField, Range(-1f, 1f)] private float minimumFacingDot = 0.2f;
 
         private GameObject guardVisual;
         private float guardAvailableAt;
@@ -44,16 +43,9 @@ namespace ElijahBlaze.Player
 
         public bool TryInterceptDamage(int amount, Transform attacker)
         {
+            // Holding guard blocks the next incoming Shardling hit from any side.
+            // A short recovery prevents one held key from canceling every attack.
             if (!IsGuarding || attacker == null)
-                return false;
-
-            Vector3 directionToAttacker = attacker.position - transform.position;
-            directionToAttacker.y = 0f;
-            if (directionToAttacker.sqrMagnitude < 0.001f)
-                return false;
-
-            float facing = Vector3.Dot(transform.forward, directionToAttacker.normalized);
-            if (facing < minimumFacingDot)
                 return false;
 
             guardAvailableAt = Time.time + recoveryAfterBlock;
