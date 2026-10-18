@@ -76,7 +76,7 @@ namespace ElijahBlaze.EditorTools
             }
 
             CreateGate(encounter, gateMaterial);
-            CreateCourtHud(encounter);
+            CreateCourtHud(encounter, player.GetComponent<Health>());
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
@@ -391,13 +391,13 @@ namespace ElijahBlaze.EditorTools
             return marker;
         }
 
-        private static void CreateCourtHud(HollowCourtEncounter encounter)
+        private static void CreateCourtHud(HollowCourtEncounter encounter, Health playerHealth)
         {
             GameObject hudObject = new GameObject("HollowCourt_HUD", typeof(RectTransform));
             hudObject.AddComponent<Canvas>();
 
             HollowCourtHud hud = hudObject.AddComponent<HollowCourtHud>();
-            hud.Configure(encounter, GameObject.Find("ElijahBlue_Player").GetComponent<Health>());
+            hud.Configure(encounter, playerHealth);
             EditorUtility.SetDirty(hud);
         }
 
