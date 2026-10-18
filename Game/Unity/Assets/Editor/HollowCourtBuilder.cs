@@ -247,8 +247,8 @@ namespace ElijahBlaze.EditorTools
 
             // The three bars form a small trident mark centered on the breastplate.
             CreatePlayerPart(upperBody, "Chest_Sigil_Stem", PrimitiveType.Cube, new Vector3(0f, 0.18f, 0.255f), new Vector3(0.045f, 0.29f, 0.035f), Vector3.zero, gold);
-            CreatePlayerPart(player.transform, "Chest_Sigil_Left", PrimitiveType.Cube, new Vector3(-0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, -35f), gold);
-            CreatePlayerPart(player.transform, "Chest_Sigil_Right", PrimitiveType.Cube, new Vector3(0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, 35f), gold);
+            CreatePlayerPart(upperBody, "Chest_Sigil_Left", PrimitiveType.Cube, new Vector3(-0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, -35f), gold);
+            CreatePlayerPart(upperBody, "Chest_Sigil_Right", PrimitiveType.Cube, new Vector3(0.075f, 0.31f, 0.255f), new Vector3(0.04f, 0.17f, 0.035f), new Vector3(0f, 0f, 35f), gold);
 
             GameObject guardVisual = CreatePlayerPart(player.transform, "Guardian_Guard_Field", PrimitiveType.Sphere, new Vector3(0f, 0.05f, 0.64f), new Vector3(1.15f, 1.72f, 0.2f), Vector3.zero, shieldMaterial);
             guardVisual.SetActive(false);
