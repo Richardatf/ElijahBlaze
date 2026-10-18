@@ -17,6 +17,7 @@ After Unity finishes importing and there are no compile errors:
 
 ## Prototype controls
 - Move: WASD / arrow keys
+- Vitality: shown in the upper-right of the objective panel
 - Attack: hold left mouse or Space to swing repeatedly; Elijah's blue slash appears, and each hit stuns the Shardling, marked by a cyan ring. Three hits defeat it
 - Guard: hold Left Shift, Right Shift, or right mouse button to block the next incoming Shardling hit from any side; a short recovery follows each block
 - Enemy attack tell: a red line marks a Shardling winding up; the line flashes gold when it strikes
