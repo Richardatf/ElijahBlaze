@@ -9,6 +9,7 @@ namespace ElijahBlaze.Player
         [SerializeField] private float radius = 1.15f;
         [SerializeField] private int damage = 1;
         [SerializeField] private float cooldown = 0.5f;
+        [SerializeField, Min(0.1f)] private float stunDuration = 0.85f;
 
         private float nextAttackTime;
 
@@ -24,7 +25,7 @@ namespace ElijahBlaze.Player
         private void Attack()
         {
             nextAttackTime = Time.time + cooldown;
-            Vector3 center = transform.position + transform.forward * range + Vector3.up;
+            Vector3 center = transform.position + transform.forward * range + Vector3.up * 0.85f;
             Collider[] hits = Physics.OverlapSphere(center, radius);
 
             foreach (Collider hit in hits)
@@ -34,13 +35,16 @@ namespace ElijahBlaze.Player
                     continue;
 
                 health.TakeDamage(damage);
+                EnemyChase chase = health.GetComponent<EnemyChase>();
+                if (chase != null)
+                    chase.Stun(stunDuration);
                 break;
             }
         }
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.DrawWireSphere(transform.position + transform.forward * range + Vector3.up, radius);
+            Gizmos.DrawWireSphere(transform.position + transform.forward * range + Vector3.up * 0.85f, radius);
         }
     }
 }

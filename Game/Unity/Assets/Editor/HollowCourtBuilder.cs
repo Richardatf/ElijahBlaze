@@ -294,6 +294,7 @@ namespace ElijahBlaze.EditorTools
             EnemyChase chase = enemy.AddComponent<EnemyChase>();
             EnemyAttack attack = enemy.AddComponent<EnemyAttack>();
             enemy.AddComponent<DeathFeedback>();
+            enemy.AddComponent<EnemyHitFeedback>();
             chase.SetTarget(target);
             chase.Configure(moveSpeed, 1.7f);
             attack.SetTarget(target);

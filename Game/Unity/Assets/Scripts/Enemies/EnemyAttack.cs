@@ -11,8 +11,14 @@ namespace ElijahBlaze.Enemies
         [SerializeField] private int damage = 1;
 
         private float nextAttackTime;
+        private EnemyChase chase;
 
         public void SetTarget(Transform attackTarget) => target = attackTarget;
+
+        private void Awake()
+        {
+            chase = GetComponent<EnemyChase>();
+        }
 
         public void Configure(float distance, float attackCooldown, int damageAmount)
         {
@@ -23,7 +29,7 @@ namespace ElijahBlaze.Enemies
 
         private void Update()
         {
-            if (target == null || Time.time < nextAttackTime)
+            if (target == null || (chase != null && chase.IsStunned) || Time.time < nextAttackTime)
                 return;
 
             if (Vector3.Distance(transform.position, target.position) > attackDistance)

@@ -17,7 +17,8 @@ After Unity finishes importing and there are no compile errors:
 
 ## Prototype controls
 - Move: WASD / arrow keys
-- Attack: left mouse or Space
+- Attack: left mouse or Space; three hits defeat a Shardling, and each hit briefly stuns it
+- Guard: hold Left Shift or right mouse button; blocks attacks from in front, with a short recovery after each successful block
 - Guard: hold Left Shift or right mouse button; blocks attacks from in front, with a short recovery after each successful block
 
 ## First loop
