@@ -57,11 +57,14 @@ namespace ElijahBlaze.EditorTools
 
             GameObject encounterObject = new GameObject("HollowCourt_Encounter");
             HollowCourtEncounter encounter = encounterObject.AddComponent<HollowCourtEncounter>();
-            encounter.Configure(enemyHealth);
+            Transform sealActivation = new GameObject("Seal_Awakening_Point").transform;
+            sealActivation.position = new Vector3(0f, 0f, 4.5f);
+            GameObject exitMarker = CreateObjectiveMarker();
+            encounter.Configure(enemyHealth, player.transform, sealActivation, exitMarker.transform);
             EditorUtility.SetDirty(encounter);
 
             CreateGate(encounter, gateMaterial);
-            CreateObjectiveMarker();
+            CreateCourtHud(encounter);
 
             EditorSceneManager.SaveScene(scene, ScenePath);
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
@@ -368,10 +371,21 @@ namespace ElijahBlaze.EditorTools
             EditorUtility.SetDirty(gate);
         }
 
-        private static void CreateObjectiveMarker()
+        private static GameObject CreateObjectiveMarker()
         {
             GameObject marker = new GameObject("Objective_ReachTheGate");
             marker.transform.position = new Vector3(0f, 0f, 13f);
+            return marker;
+        }
+
+        private static void CreateCourtHud(HollowCourtEncounter encounter)
+        {
+            GameObject hudObject = new GameObject("HollowCourt_HUD", typeof(RectTransform));
+            hudObject.AddComponent<Canvas>();
+
+            HollowCourtHud hud = hudObject.AddComponent<HollowCourtHud>();
+            hud.Configure(encounter);
+            EditorUtility.SetDirty(hud);
         }
 
         private static GameObject CreateBlock(string name, Vector3 position, Vector3 scale, Material material)
