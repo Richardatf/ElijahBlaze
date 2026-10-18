@@ -8,10 +8,10 @@ namespace ElijahBlaze.Player
     /// </summary>
     public class PlayerProceduralMotion : MonoBehaviour
     {
-        [SerializeField] private float walkCyclesPerSecond = 1.35f;
-        [SerializeField] private float legSwingDegrees = 19f;
-        [SerializeField] private float armSwingDegrees = 12f;
-        [SerializeField] private float bodyBobHeight = 0.025f;
+        [SerializeField] private float walkCyclesPerSecond = 1.5f;
+        [SerializeField] private float legSwingDegrees = 22f;
+        [SerializeField] private float armSwingDegrees = 13f;
+        [SerializeField] private float bodyBobHeight = 0.028f;
 
         private PlayerController movement;
         private Transform upperBody;
@@ -66,9 +66,13 @@ namespace ElijahBlaze.Player
             float bob = Mathf.Abs(Mathf.Sin(gaitPhase)) * bodyBobHeight * blend + breathing;
 
             upperBody.localPosition = upperBodyRestPosition + Vector3.up * bob;
+
+            float accelerationLean = Mathf.Clamp(movement.ForwardAcceleration * 0.08f, -2.5f, 2.5f);
+            float forwardLean = accelerationLean + 1.1f * blend;
+            float gentleSway = Mathf.Sin(gaitPhase * 0.5f) * 0.8f * blend;
             upperBody.localRotation = upperBodyRestRotation
-                * Quaternion.AngleAxis(1.4f * blend, Vector3.right)
-                * Quaternion.AngleAxis(Mathf.Sin(gaitPhase * 0.5f) * 0.8f * blend, Vector3.forward);
+                * Quaternion.AngleAxis(forwardLean, Vector3.right)
+                * Quaternion.AngleAxis(gentleSway, Vector3.forward);
 
             if (leftLegPivot != null)
                 leftLegPivot.localRotation = leftLegRestRotation * Quaternion.AngleAxis(stride * legSwingDegrees, Vector3.right);
