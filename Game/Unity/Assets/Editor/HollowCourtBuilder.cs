@@ -186,7 +186,7 @@ namespace ElijahBlaze.EditorTools
         {
             GameObject player = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             player.name = "ElijahBlue_Player";
-            player.transform.position = new Vector3(0f, 1f, -10f);
+            player.transform.position = new Vector3(0f, 1f, -7.5f);
             player.GetComponent<Renderer>().enabled = false;
             Object.DestroyImmediate(player.GetComponent<CapsuleCollider>());
 
@@ -263,7 +263,7 @@ namespace ElijahBlaze.EditorTools
             Camera camera = cameraObject.AddComponent<Camera>();
             camera.fieldOfView = 62f;
             cameraObject.AddComponent<AudioListener>();
-            cameraObject.transform.position = target.position + new Vector3(0f, 4.5f, -7f);
+            cameraObject.transform.position = target.position + new Vector3(0f, 3.8f, -4.5f);
             CameraFollow follow = cameraObject.AddComponent<CameraFollow>();
             follow.SetTarget(target);
             EditorUtility.SetDirty(follow);
