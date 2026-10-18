@@ -150,7 +150,7 @@ namespace ElijahBlaze.EditorTools
                 float angle = Mathf.PI * 2f * i / 8f;
                 Vector3 spoke = sealCenter + new Vector3(Mathf.Cos(angle) * 3.75f, 0f, Mathf.Sin(angle) * 3.75f);
                 GameObject mark = CreateInlay("Seal_Radial_Mark_" + (i + 1), spoke, new Vector3(0.11f, 0.035f, 1.0f), inlay);
-                mark.transform.rotation = Quaternion.Euler(0f, -angle * Mathf.Rad2Deg, 0f);
+                mark.transform.rotation = Quaternion.Euler(0f, 90f - angle * Mathf.Rad2Deg, 0f);
             }
 
             CreateInlay("Approach_Line_Left", new Vector3(-1.05f, 0.025f, -5f), new Vector3(0.08f, 0.04f, 18f), inlay);
@@ -248,7 +248,7 @@ namespace ElijahBlaze.EditorTools
             return block;
         }
 
-        private static void CreateInlay(string name, Vector3 position, Vector3 scale, Material material)
+        private static GameObject CreateInlay(string name, Vector3 position, Vector3 scale, Material material)
         {
             GameObject inlay = GameObject.CreatePrimitive(PrimitiveType.Cube);
             inlay.name = name;
@@ -256,6 +256,7 @@ namespace ElijahBlaze.EditorTools
             inlay.transform.localScale = scale;
             Object.DestroyImmediate(inlay.GetComponent<Collider>());
             inlay.GetComponent<Renderer>().sharedMaterial = material;
+            return inlay;
         }
 
         private static void CreateRing(string name, Vector3 center, float radius, float width, Material material)
