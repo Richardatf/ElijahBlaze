@@ -5,7 +5,7 @@ namespace ElijahBlaze.CameraSystem
     public class CameraFollow : MonoBehaviour
     {
         [SerializeField] private Transform target;
-        [SerializeField] private Vector3 offset = new Vector3(0f, 4.5f, -7f);
+        [SerializeField] private Vector3 offset = new Vector3(0f, 3.8f, -4.5f);
         [SerializeField] private float positionSmooth = 7f;
         [SerializeField] private float lookHeight = 1.5f;
 
