@@ -397,7 +397,7 @@ namespace ElijahBlaze.EditorTools
             hudObject.AddComponent<Canvas>();
 
             HollowCourtHud hud = hudObject.AddComponent<HollowCourtHud>();
-            hud.Configure(encounter);
+            hud.Configure(encounter, GameObject.Find("ElijahBlue_Player").GetComponent<Health>());
             EditorUtility.SetDirty(hud);
         }
 
