@@ -89,42 +89,86 @@ namespace ElijahBlaze.EditorTools
 
         private static void CreateCourt(Material stone, Material architecture, Material inlay)
         {
+            // The court is a long processional hall with three readable zones:
+            // entry, open combat floor, and the sealed resonance threshold.
             CreateBlock("Court_Floor", new Vector3(0f, -0.5f, 2f), new Vector3(26f, 1f, 34f), stone);
             CreateBlock("West_Wall", new Vector3(-13f, 3f, 2f), new Vector3(1f, 7f, 34f), stone);
             CreateBlock("East_Wall", new Vector3(13f, 3f, 2f), new Vector3(1f, 7f, 34f), stone);
             CreateBlock("Back_Wall", new Vector3(0f, 3f, 18.5f), new Vector3(26f, 7f, 1f), stone);
 
-            // Wall buttresses define the room's scale while keeping the combat lane clear.
-            float[] buttressZ = { -10f, -2f, 6f, 14f };
-            for (int i = 0; i < buttressZ.Length; i++)
+            // Long floor joints give the space scale and lead the eye toward the gate.
+            for (int i = -2; i <= 2; i++)
             {
-                CreateBlock("West_Buttress_" + (i + 1), new Vector3(-11.9f, 3.2f, buttressZ[i]), new Vector3(1.2f, 6.4f, 1.8f), architecture);
-                CreateBlock("East_Buttress_" + (i + 1), new Vector3(11.9f, 3.2f, buttressZ[i]), new Vector3(1.2f, 6.4f, 1.8f), architecture);
+                float x = i * 4f;
+                CreateInlay("Floor_Long_Joint_" + (i + 3), new Vector3(x, 0.012f, 2f), new Vector3(0.045f, 0.025f, 32f), inlay);
+            }
+            float[] crossJoints = { -10f, -5f, 0f, 10f };
+            for (int i = 0; i < crossJoints.Length; i++)
+                CreateInlay("Floor_Cross_Joint_" + (i + 1), new Vector3(0f, 0.014f, crossJoints[i]), new Vector3(24f, 0.025f, 0.045f), inlay);
+
+            // Repeating ribs make the side walls read as carved architecture instead of a box.
+            float[] ribZ = { -10f, -3f, 4f, 11f, 16f };
+            for (int i = 0; i < ribZ.Length; i++)
+            {
+                float height = (i % 2 == 0) ? 6.8f : 5.8f;
+                CreateBlock("West_Wall_Rib_" + (i + 1), new Vector3(-12.35f, height * 0.5f, ribZ[i]), new Vector3(0.9f, height, 1.5f), architecture);
+                CreateBlock("East_Wall_Rib_" + (i + 1), new Vector3(12.35f, height * 0.5f, ribZ[i]), new Vector3(0.9f, height, 1.5f), architecture);
+                CreateBlock("West_Rib_Cap_" + (i + 1), new Vector3(-12.35f, height + 0.18f, ribZ[i]), new Vector3(1.35f, 0.36f, 1.95f), architecture);
+                CreateBlock("East_Rib_Cap_" + (i + 1), new Vector3(12.35f, height + 0.18f, ribZ[i]), new Vector3(1.35f, 0.36f, 1.95f), architecture);
             }
 
-            // Low monoliths create readable flank routes and brief cover without sealing the center.
+            // Entry arch marks the way in and frames the player on a fresh run.
+            CreateBlock("Entry_Pier_West", new Vector3(-5.2f, 2.35f, -13.2f), new Vector3(1.1f, 4.7f, 1.5f), architecture);
+            CreateBlock("Entry_Pier_East", new Vector3(5.2f, 2.35f, -13.2f), new Vector3(1.1f, 4.7f, 1.5f), architecture);
+            CreateBlock("Entry_Lintel", new Vector3(0f, 4.95f, -13.2f), new Vector3(11.5f, 0.9f, 1.5f), architecture);
+            CreateInlay("Entry_Crown_Inlay", new Vector3(0f, 5.43f, -13.2f), new Vector3(2.8f, 0.06f, 0.08f), inlay);
+
+            // The encounter has a broad clear center and two looping flank lanes.
+            // These offset monoliths provide cover without creating dead ends.
             Vector3[] monolithPositions =
             {
-                new Vector3(-7f, 0.9f, -3f),
-                new Vector3(7f, 0.9f, 0f),
-                new Vector3(-7f, 0.9f, 5f),
-                new Vector3(7f, 0.9f, 8f),
-                new Vector3(-7f, 0.9f, 11f)
+                new Vector3(-7.4f, 1.2f, -2f),
+                new Vector3(7.4f, 1.2f, 1f),
+                new Vector3(-7.4f, 1.2f, 6f),
+                new Vector3(7.4f, 1.2f, 9f)
             };
             for (int i = 0; i < monolithPositions.Length; i++)
-                CreateBlock("Court_Monolith_" + (i + 1), monolithPositions[i], new Vector3(1.8f, 1.8f, 1.4f), architecture);
+            {
+                Vector3 position = monolithPositions[i];
+                CreateBlock("Court_Monolith_" + (i + 1), position, new Vector3(1.5f, 2.4f, 1.5f), architecture);
+                CreateBlock("Court_Monolith_Cap_" + (i + 1), position + new Vector3(0f, 1.28f, 0f), new Vector3(1.9f, 0.22f, 1.9f), inlay);
+                CreateInlay("Court_Monolith_Face_" + (i + 1), position + new Vector3(0f, 0.15f, -0.76f), new Vector3(0.16f, 1.45f, 0.045f), inlay);
+            }
 
-            // Inlaid rings mark the encounter space; the straight center approach remains open.
-            CreateRing("Resonance_Ring_Outer", new Vector3(0f, 0.025f, 5f), 6.1f, 0.09f, inlay);
-            CreateRing("Resonance_Ring_Inner", new Vector3(0f, 0.03f, 5f), 3.4f, 0.055f, inlay);
+            // A large inlaid encounter seal occupies the open center without blocking movement.
+            Vector3 sealCenter = new Vector3(0f, 0.025f, 4.5f);
+            CreateRing("Resonance_Ring_Outer", sealCenter, 6.4f, 0.11f, inlay);
+            CreateRing("Resonance_Ring_Middle", sealCenter, 4.7f, 0.075f, inlay);
+            CreateRing("Resonance_Ring_Inner", sealCenter, 2.8f, 0.06f, inlay);
+            for (int i = 0; i < 8; i++)
+            {
+                float angle = Mathf.PI * 2f * i / 8f;
+                Vector3 spoke = sealCenter + new Vector3(Mathf.Cos(angle) * 3.75f, 0f, Mathf.Sin(angle) * 3.75f);
+                GameObject mark = CreateInlay("Seal_Radial_Mark_" + (i + 1), spoke, new Vector3(0.11f, 0.035f, 1.0f), inlay);
+                mark.transform.rotation = Quaternion.Euler(0f, -angle * Mathf.Rad2Deg, 0f);
+            }
+
             CreateInlay("Approach_Line_Left", new Vector3(-1.05f, 0.025f, -5f), new Vector3(0.08f, 0.04f, 18f), inlay);
             CreateInlay("Approach_Line_Right", new Vector3(1.05f, 0.025f, -5f), new Vector3(0.08f, 0.04f, 18f), inlay);
 
-            // The threshold frames the gate as the destination and leaves a broad route beneath it.
-            CreateBlock("Threshold_Left", new Vector3(-4.15f, 2.7f, 14.7f), new Vector3(0.9f, 5.4f, 1.5f), architecture);
-            CreateBlock("Threshold_Right", new Vector3(4.15f, 2.7f, 14.7f), new Vector3(0.9f, 5.4f, 1.5f), architecture);
-            CreateBlock("Threshold_Lintel", new Vector3(0f, 5.55f, 14.7f), new Vector3(9.2f, 0.9f, 1.5f), architecture);
-            CreateInlay("Gate_Crown_Inlay", new Vector3(0f, 6.03f, 14.68f), new Vector3(2.1f, 0.07f, 0.08f), inlay);
+            // Three shallow threshold courses lead toward the gate; each remains traversable.
+            for (int i = 0; i < 3; i++)
+            {
+                float stepZ = 10.7f + i * 1.05f;
+                float stepHeight = 0.12f + i * 0.08f;
+                CreateBlock("Gate_Approach_Course_" + (i + 1), new Vector3(0f, stepHeight * 0.5f, stepZ), new Vector3(8.4f, stepHeight, 0.8f), architecture);
+            }
+
+            // Gate frame and crown establish a clear destination silhouette.
+            CreateBlock("Threshold_Left", new Vector3(-4.7f, 2.9f, 14.7f), new Vector3(1.1f, 5.8f, 1.7f), architecture);
+            CreateBlock("Threshold_Right", new Vector3(4.7f, 2.9f, 14.7f), new Vector3(1.1f, 5.8f, 1.7f), architecture);
+            CreateBlock("Threshold_Lintel", new Vector3(0f, 6.0f, 14.7f), new Vector3(10.5f, 1.0f, 1.7f), architecture);
+            CreateInlay("Gate_Crown_Inlay", new Vector3(0f, 6.53f, 14.68f), new Vector3(2.7f, 0.08f, 0.08f), inlay);
         }
 
         private static GameObject CreatePlayer(Material material)
