@@ -22,6 +22,8 @@ After Unity finishes importing and there are no compile errors:
 - Enemy attack tell: a red line marks a Shardling winding up; the line flashes gold when it strikes
 
 ## First loop
-Enter the court → survive three Shardlings → defeat the encounter → the Resonance Gate rises.
+Enter the court → follow the luminous floor seal → meet the Shardlings as they wake in sequence → defeat all three → cross to the far threshold → reach the Resonance Gate to complete the Hollow Court slice.
+
+The gate remains a simple placeholder in this build; its fuller visual and interaction design comes later.
 
 Do not manually create a second Unity project. This folder is the game project from now on.
