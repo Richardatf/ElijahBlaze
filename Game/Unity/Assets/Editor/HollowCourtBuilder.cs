@@ -62,6 +62,18 @@ namespace ElijahBlaze.EditorTools
             GameObject exitMarker = CreateObjectiveMarker();
             encounter.Configure(enemyHealth, player.transform, sealActivation, exitMarker.transform);
             EditorUtility.SetDirty(encounter);
+            foreach (Health enemy in enemyHealth)
+            {
+                if (enemy == null)
+                    continue;
+
+                EnemyChase chase = enemy.GetComponent<EnemyChase>();
+                EnemyAttack attack = enemy.GetComponent<EnemyAttack>();
+                if (chase != null)
+                    EditorUtility.SetDirty(chase);
+                if (attack != null)
+                    EditorUtility.SetDirty(attack);
+            }
 
             CreateGate(encounter, gateMaterial);
             CreateCourtHud(encounter);
@@ -159,6 +171,7 @@ namespace ElijahBlaze.EditorTools
             CreateRing("Resonance_Ring_Outer", sealCenter, 6.4f, 0.11f, inlay);
             CreateRing("Resonance_Ring_Middle", sealCenter, 4.7f, 0.075f, inlay);
             CreateRing("Resonance_Ring_Inner", sealCenter, 2.8f, 0.06f, inlay);
+            CreatePointLight("Seal_Resonance_Light", new Vector3(0f, 1.3f, 4.5f), new Color(0.3f, 0.78f, 0.9f), 1.1f, 6f);
             for (int i = 0; i < 8; i++)
             {
                 float angle = Mathf.PI * 2f * i / 8f;
