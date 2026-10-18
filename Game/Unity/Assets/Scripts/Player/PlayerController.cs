@@ -27,6 +27,8 @@ namespace ElijahBlaze.Player
             }
         }
 
+        public float ForwardAcceleration { get; private set; }
+
         private void Awake()
         {
             controller = GetComponent<CharacterController>();
@@ -62,9 +64,14 @@ namespace ElijahBlaze.Player
                 moveDirection.Normalize();
 
             float inputAmount = input.magnitude;
+            float deltaTime = Time.deltaTime;
+            Vector3 previousVelocity = planarVelocity;
             Vector3 targetVelocity = moveDirection * (moveSpeed * inputAmount);
             float speedChange = inputAmount > 0f ? acceleration : deceleration;
-            planarVelocity = Vector3.MoveTowards(planarVelocity, targetVelocity, speedChange * Time.deltaTime);
+            planarVelocity = Vector3.MoveTowards(planarVelocity, targetVelocity, speedChange * deltaTime);
+
+            Vector3 planarAcceleration = (planarVelocity - previousVelocity) / Mathf.Max(deltaTime, 0.0001f);
+            ForwardAcceleration = Vector3.Dot(planarAcceleration, transform.forward);
 
             if (moveDirection.sqrMagnitude > 0.001f)
             {
@@ -72,15 +79,15 @@ namespace ElijahBlaze.Player
                 transform.rotation = Quaternion.RotateTowards(
                     transform.rotation,
                     targetRotation,
-                    turnRateDegrees * Time.deltaTime);
+                    turnRateDegrees * deltaTime);
             }
 
             if (controller.isGrounded && verticalVelocity < 0f)
                 verticalVelocity = -2f;
 
-            verticalVelocity += gravity * Time.deltaTime;
+            verticalVelocity += gravity * deltaTime;
             Vector3 velocity = planarVelocity + Vector3.up * verticalVelocity;
-            controller.Move(velocity * Time.deltaTime);
+            controller.Move(velocity * deltaTime);
         }
     }
 }
