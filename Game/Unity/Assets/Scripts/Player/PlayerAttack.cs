@@ -1,3 +1,4 @@
+using System.Collections;
 using ElijahBlaze.Core;
 using ElijahBlaze.Enemies;
 using UnityEngine;
@@ -13,6 +14,13 @@ namespace ElijahBlaze.Player
         [SerializeField, Min(0.1f)] private float stunDuration = 0.85f;
 
         private float nextAttackTime;
+        private LineRenderer slashLine;
+        private Coroutine slashRoutine;
+
+        private void Awake()
+        {
+            CreateSlashVisual();
+        }
 
         private void Update()
         {
@@ -27,6 +35,7 @@ namespace ElijahBlaze.Player
         private void Attack()
         {
             nextAttackTime = Time.time + cooldown;
+            ShowSlash();
 
             // Keep the strike close to Elijah so it still catches a Shardling
             // that has rushed into melee range instead of passing behind the swing.
@@ -73,6 +82,74 @@ namespace ElijahBlaze.Player
             closestHealth.TakeDamage(damage);
             if (closestChase != null)
                 closestChase.Stun(stunDuration);
+
+            EnemyHitFeedback feedback = closestHealth.GetComponent<EnemyHitFeedback>();
+            if (feedback == null)
+                feedback = closestHealth.GetComponentInParent<EnemyHitFeedback>();
+            if (feedback != null)
+                feedback.ShowStunned(stunDuration);
+        }
+
+        private void CreateSlashVisual()
+        {
+            GameObject slashObject = new GameObject("Elijah_Attack_Slash");
+            slashObject.transform.SetParent(transform, false);
+
+            slashLine = slashObject.AddComponent<LineRenderer>();
+            slashLine.useWorldSpace = true;
+            slashLine.loop = false;
+            slashLine.positionCount = 9;
+            slashLine.startWidth = 0.14f;
+            slashLine.endWidth = 0.045f;
+            slashLine.numCapVertices = 4;
+            slashLine.numCornerVertices = 4;
+            slashLine.sharedMaterial = CreateEffectMaterial();
+            slashLine.startColor = new Color(0.9f, 0.98f, 1f, 1f);
+            slashLine.endColor = new Color(0.22f, 0.72f, 1f, 1f);
+            slashLine.enabled = false;
+        }
+
+        private void ShowSlash()
+        {
+            if (slashRoutine != null)
+                StopCoroutine(slashRoutine);
+
+            Vector3 forward = transform.forward;
+            forward.y = 0f;
+            forward.Normalize();
+            Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
+            Vector3 center = transform.position + Vector3.up * 1.05f + forward * 0.35f;
+            float arcRadius = Mathf.Min(range * 0.52f, 1.4f);
+
+            for (int i = 0; i < slashLine.positionCount; i++)
+            {
+                float t = i / (float)(slashLine.positionCount - 1);
+                float angle = Mathf.Lerp(-1.05f, 1.05f, t);
+                Vector3 point = center
+                    + forward * (Mathf.Cos(angle) * arcRadius)
+                    + right * (Mathf.Sin(angle) * arcRadius);
+                point.y += Mathf.Sin(t * Mathf.PI) * 0.12f;
+                slashLine.SetPosition(i, point);
+            }
+
+            slashLine.enabled = true;
+            slashRoutine = StartCoroutine(HideSlashAfter(0.18f));
+        }
+
+        private IEnumerator HideSlashAfter(float duration)
+        {
+            yield return new WaitForSeconds(duration);
+            if (slashLine != null)
+                slashLine.enabled = false;
+            slashRoutine = null;
+        }
+
+        private static Material CreateEffectMaterial()
+        {
+            Shader shader = Shader.Find("Sprites/Default");
+            if (shader == null)
+                shader = Shader.Find("Unlit/Color");
+            return new Material(shader) { color = Color.white };
         }
 
         private void OnDrawGizmosSelected()
