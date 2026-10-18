@@ -8,21 +8,20 @@ The game is a third-person action-adventure prototype built around discovery, mo
 The player must feel that they are uncovering a truth that has patiently waited thousands of years to be remembered.
 
 ### Prototype status
-- Player movement: playable
-- Camera follow: playable
-- Shardling chase: playable
-- Combat: playable
-- Health/damage: playable
-- Death feedback: next verification target
-- Gate objective: next gameplay target
+- Player movement and chase camera: implemented
+- Awakening seal and staged Shardling encounter: implemented, pending Unity play test
+- Visible attack, stun, enemy windup, and guard feedback: implemented, pending Unity play test
+- Objective and encounter progress HUD: implemented, pending Unity play test
+- Encounter-clear and threshold-completion flow: implemented, pending Unity play test
+- Resonance Gate: simple placeholder response only; full gate design and interaction remain future work
 
 ### Immediate vertical-slice loop
-1. Enter Hollow Court.
-2. Explore and discover the first architectural signal.
-3. Shardling detects Elijah and pursues him.
-4. Player survives a deliberate combat encounter.
-5. Defeating the encounter restores resonance to a dormant gate.
-6. Gate opens and reveals the next mystery.
+1. Enter Hollow Court and follow the luminous floor seal.
+2. Approach the center seal; the dormant Shardlings awaken one at a time.
+3. Read each red attack tell, stun the Shardlings, and guard their strikes.
+4. Defeat all three; the HUD reports the encounter clear.
+5. Cross to the far threshold while the placeholder Resonance Gate rises.
+6. Reach the threshold to complete the Hollow Court slice.
 
 ### Development order
 Mechanics first. Feedback second. Art third. Do not replace prototype geometry merely to make the scene prettier before the loop is fun.

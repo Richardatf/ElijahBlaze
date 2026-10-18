@@ -41,12 +41,15 @@ Acceptance criteria:
 - Opening is event-driven, not coupled directly to a specific enemy class.
 
 ## HC-005 — Prototype Game Loop
-Connect spawn/start → encounter → clear → gate awakening → objective complete.
+Connect arrival → architectural signal → encounter start → encounter clear → threshold reached.
 
 Acceptance criteria:
-- A new player can understand what happened without watching the Console.
-- No required gameplay information exists only in debug logs.
-- Entire loop can be replayed after restart.
+- The player discovers the central resonance seal before the Shardlings awaken.
+- Shardlings wake in sequence to prevent an unreadable opening rush.
+- A HUD communicates the current objective, encounter count, and controls without relying on the Console.
+- Attacks, stuns, enemy windups, blocks, deaths, and completion have visible feedback.
+- The clear state directs Elijah to the far threshold; the existing gate remains a placeholder until its dedicated build-out.
+- The loop restarts cleanly after player death.
 
 ## Codex guardrails
 - Read the repository `AGENTS.md` and `Game/GAME_BIBLE.md` first.

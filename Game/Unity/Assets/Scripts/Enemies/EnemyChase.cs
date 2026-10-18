@@ -9,11 +9,26 @@ namespace ElijahBlaze.Enemies
         [SerializeField] private float stopDistance = 1.8f;
         [SerializeField] private float turnSpeed = 8f;
 
+        private float stunnedUntil;
+
         public void SetTarget(Transform chaseTarget) => target = chaseTarget;
+
+        public bool IsStunned => Time.time < stunnedUntil;
+
+        public void Stun(float duration)
+        {
+            stunnedUntil = Mathf.Max(stunnedUntil, Time.time + duration);
+        }
+
+        public void Configure(float speed, float distanceToStop)
+        {
+            moveSpeed = speed;
+            stopDistance = distanceToStop;
+        }
 
         private void Update()
         {
-            if (target == null)
+            if (target == null || IsStunned)
                 return;
 
             Vector3 toTarget = target.position - transform.position;
